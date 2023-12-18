@@ -8,7 +8,7 @@ For the bot's command reference, go to the [Docs](./docs/).
 
 ### Install necessary Python tools
 
-1. Install **Python 3.12**
+1. Install **Python 3.10**
 2. **Recommended:** Get [pipx](https://pypa.github.io/pipx/) to manage global Python packages.
 3. Install **pipenv**
    1. `pipx install pipenv`
@@ -16,31 +16,37 @@ For the bot's command reference, go to the [Docs](./docs/).
 ### Environment setup
 
 Once you've cloned the repo, run
+
 ```shell
 pipenv install
 ```
 
 Once that completes, initialize the DB by running this at the root of the repo:
+
 ```shell
 pipenv run python cli.py db create_all
 ```
 
 Finally, create a `.env` file at the root of the repo with the following contents:
-```
+
+```shell
 BOT_TOKEN="<YOUR_BOT_TOKEN>"
 ```
+
 Replace `<YOUR_BOT_TOKEN>` with your own test bot token. If you don't know how
 to make one, follow Step 1 on [this page](https://discord.com/developers/docs/getting-started#step-1-creating-an-app).
 
 ### Running the bot
 
 You can run the bot from your terminal using
+
 ```shell
 pipenv run python main.py
 ```
 
 If everything's working, you should see this appear after a few seconds:
-```
+
+```shell
 Logged in as
 Your Bot Name
 12345678900982345
