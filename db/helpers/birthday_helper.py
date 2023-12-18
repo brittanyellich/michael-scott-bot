@@ -120,7 +120,7 @@ def get_todays_baby_month_milestones() -> List[Birthday]:
         sa.text(f"""
         SELECT *
         FROM birthdays
-        WHERE day = {now.day} and (year = {now.year} and month < {now.month}) or (year = {last_year.year} and month >= {now.month})
+        WHERE day = {now.day} and ((year = {now.year} and month < {now.month}) or (year = {last_year.year} and month >= {now.month}))
         ORDER BY guild_id desc;
         """)
     ).all()
@@ -130,10 +130,10 @@ def get_todays_baby_month_milestones() -> List[Birthday]:
             sa.text(f"""
             SELECT *
             FROM birthdays
-            WHERE day > {now.day} and year = {now.year} or (year = {last_year.year} and month >= {now.month})
+            WHERE day > {now.day} and ((year = {now.year} and month < {now.month}) or (year = {last_year.year} and month >= {now.month}))
             ORDER BY guild_id desc;
             """)
-        ).all()
+        ).all() 
     # make hashmap of guild_id -> [birthdays]
     birthdays = {guild_id: [] for guild_id in set([birthday.guild_id for birthday in queried_birthdays])}
     for birthday in queried_birthdays:
