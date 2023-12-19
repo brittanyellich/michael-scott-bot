@@ -5,7 +5,7 @@ from nextcord import slash_command, Interaction, SlashOption, Permissions, Membe
 from nextcord.ext import commands, tasks
 
 from bot.utils import messages
-from db.helpers import birthday_helper
+from db.helpers import quote_helper
 
 class QuoteCommands(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -39,7 +39,14 @@ class QuoteCommands(commands.Cog):
     async def quote_add(self, interaction: Interaction,
                             name: str = SlashOption(name='name', description='Name of person who said quote'),
                             quote: str = SlashOption(name='quote', description='Quote')):
-        await interaction.send('Not implemented yet.')
+        # Strip quotation marks if they exist around quote
+        if quote.startswith('"') and quote.endswith('"'):
+            quote = quote[1:-1]
+        success = quote_helper.add_quote(interaction.guild_id, interaction.user.id, name.lower(), quote)
+        if success:
+            await interaction.send('Quote added.')
+        else:
+            await interaction.send('An error occurred when adding quote.')
     
     @quote.subcommand(name='random', description='Get a random quote')
     async def quote_random(self, interaction: Interaction,
@@ -49,9 +56,20 @@ class QuoteCommands(commands.Cog):
         
     @quote.subcommand(name='list', description='List quotes')
     async def quote_list(self, interaction: Interaction,
-                            name: Member = SlashOption(name='name',
+                            name: str = SlashOption(name='name',
                                                          description='Optional name to list quotes for', required=False),):
-        await interaction.send('Not implemented yet.')
+        quotes = None
+        if name is None:
+            quotes = quote_helper.list_quotes(interaction.guild_id)
+        else:
+            quotes = quote_helper.list_quotes_by_name(interaction.guild_id, name.lower())
+        if len(quotes) == 0:
+            embed = messages.info(f'No stored quotes found. Usse `/quote add` to add a quote.')
+            return await interaction.send(embed=embed)
+        embed = messages.info(f'Current quotes stored. Use `/quote remove` to remove a stored quote.')
+        for quote in quotes:
+            embed.add_field(name=f'{str(quote[0].number)} - {quote[0].name.title()}', value=f'"{quote[0].quote}"', inline=False)
+        return await interaction.send(embed=embed)
 
     @quote.subcommand(name='remove', description='Remove a birthday')
     async def quote_remove(self, interaction: Interaction,
