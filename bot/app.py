@@ -3,6 +3,7 @@ import sentry_sdk
 from nextcord.ext import commands
 
 from bot.cogs.birthday.birthday_commands import BirthdayCommands
+from bot.cogs.quote.quote_commands import QuoteCommands
 from bot.config import Config
 from bot.utils import logger
 
@@ -37,6 +38,7 @@ async def on_ready():
 
 def run():
     bot.add_cog(BirthdayCommands(bot))
+    bot.add_cog(QuoteCommands(bot))
     logger.register_bot(bot)
     bot.run(config.BOT_TOKEN)
 

@@ -7,5 +7,6 @@ from sqla_wrapper import Alembic
 from db.model import DB
 from db.model.birthday import *
 from db.model.guild_config import *
+from db.model.quote import *
 
 alembic = Alembic(DB, 'db/migrations')

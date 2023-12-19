@@ -72,7 +72,7 @@ class BirthdayCommands(commands.Cog):
     ##############################
 
     @slash_command(name='birthday-admin',
-                   description='Birthday commands', default_member_permissions=Permissions(manage_guild=True))
+                   description='Birthday admin commands', default_member_permissions=Permissions(manage_guild=True))
     async def birthday_admin(self, interaction: Interaction):
         pass
 
