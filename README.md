@@ -1,4 +1,4 @@
-# Timber Bot
+# Michael Scott Bot
 
 The purpose of this bot is to be a space for automating some tasks in a few family discord servers, and to experiment with some different bot functionality.
 
