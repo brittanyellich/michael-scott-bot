@@ -1,3 +1,3 @@
 from sqla_wrapper import SQLAlchemy
 
-DB = SQLAlchemy('sqlite:///timber-bot-db.sqlite')
+DB = SQLAlchemy('sqlite:///michael-scott-bot-db.sqlite')

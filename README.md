@@ -1,5 +1,7 @@
 # Michael Scott Bot
 
+![Michael Scott looking surprised](https://media.giphy.com/media/tlGD7PDy1w8fK/giphy.gif)
+
 The purpose of this bot is to be a space for automating some tasks in a few family discord servers, and to experiment with some different bot functionality.
 
 For the bot's command reference, go to the [Docs](./docs/).

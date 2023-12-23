@@ -37,12 +37,17 @@ def santa_message(message: str, sender: nextcord.User, show_name=False):
 
 def get_random_happy_gif():
     happy_gifs = [
-        "https://media.giphy.com/media/sYi4G4Y12owADYsx8s/giphy-downsized-large.gif"
+        "https://media.giphy.com/media/tlGD7PDy1w8fK/giphy.gif",
+        "https://media.giphy.com/media/vzoYZ7Ef9clbO/giphy.gif",
+        "https://media.giphy.com/media/cuhFeODDrIYIU/giphy.gif",
+        "https://media.giphy.com/media/nd8AmIlzfIi5i/giphy.gif",
+        "https://media.giphy.com/media/ui1hpJSyBDWlG/giphy.gif",
+        "https://media.giphy.com/media/oyIpShY494JVe/giphy.gif"
     ]
     return random.choice(happy_gifs)
 
 def birthday_message():
-    embed = nextcord.Embed(color=SUCCESS_COLOR, title='Happiest birthday from Timber Pup!')
+    embed = nextcord.Embed(color=SUCCESS_COLOR, title='Happiest birthday from Michael Scott!')
     embed.set_image(url=get_random_happy_gif())
     return embed
 
@@ -64,8 +69,8 @@ def birthday_entry(embed: nextcord.Embed, birthday: Birthday, member: nextcord.M
 
 def get_special_birthday_fields(embed: nextcord.Embed):
     # if today is October 16th
-    if nextcord.utils.utcnow().strftime('%m-%d') == '07-03':
-        embed.add_field(name='\u200b', value=f'And a very happy {get_birthday_number(2017)} birthday to dearest Timber!', inline=False)
+    if nextcord.utils.utcnow().strftime('%m-%d') == '03-15':
+        embed.add_field(name='\u200b', value=f"And a very happy birthday to the World's Best Boss, Michael Scott! Check out this video recap to celebrate! https://youtu.be/er5aJy0fHvI?feature=shared", inline=False)
     # if today is March 1st and it's not a leap year
     if nextcord.utils.utcnow().strftime('%m-%d') == '03-01' and not nextcord.utils.utcnow().year % 4 == 0:
         embed.add_field(name='\u200b', value=f'And a very happy birthday to those celebrating a leap year birthday.', inline=False)
