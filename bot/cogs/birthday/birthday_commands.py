@@ -1,5 +1,6 @@
 from datetime import datetime, timezone, time
 import asyncio
+import calendar
 
 from nextcord import slash_command, Interaction, SlashOption, Permissions, Member, TextChannel
 from nextcord.ext import commands, tasks
@@ -176,6 +177,6 @@ class BirthdayCommands(commands.Cog):
         guild = self.bot.get_guild(interaction.guild_id)
         for birthday in birthdays:
             member = guild.get_member(birthday.user_id)
-            embed.add_field(name=f'{member.nick}: {birthday.name.title()}', value=f'{birthday.month}/{birthday.day}/{birthday.year}', inline=False)
+            embed.add_field(name=f'{calendar.month_name[birthday.month]} {birthday.day}', value=f'{member.mention}: {birthday.name.title()}', inline=False)
         await interaction.send(embed=embed)
 

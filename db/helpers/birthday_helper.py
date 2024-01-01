@@ -154,6 +154,5 @@ def get_upcoming_birthdays(guild_id: int):
         ORDER BY month, day;
         """)
     ).all()
-
     return queried_birthdays
 
