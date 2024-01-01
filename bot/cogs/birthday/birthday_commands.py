@@ -103,11 +103,11 @@ class BirthdayCommands(commands.Cog):
             dt = datetime.strptime(date, '%m/%d/%Y')
             success = birthday_helper.add_birthday(interaction.guild_id, user.id, name.lower(), dt.month, dt.day, dt.year)
             if success:
-                await interaction.send(f'Birthday added for {user.display_name}.')
+                await interaction.send(f'Birthday added: `{name} | {dt.strftime("%b %d, %Y")}`', ephemeral=True)
             else:
-                await interaction.send(f'Birthday already exists for {name.title()}. Try a different name, or remove the existing birthday first.')
+                await interaction.send(f'Birthday already exists for {name.title()}. Try a different name, or remove the existing birthday first.', ephemeral=True)
         except ValueError:
-            return await interaction.send('Please provide a date in the format MM/DD/YYYY')
+            return await interaction.send('Please provide a date in the format MM/DD/YYYY', ephemeral=True)
 
     @birthday_admin.subcommand(name='remove', description='Remove a birthday')
     async def birthday_admin_remove(self, interaction: Interaction,
@@ -115,8 +115,8 @@ class BirthdayCommands(commands.Cog):
                                 name: str = SlashOption(name='name', description='Name of birthday to remove')):
         success = birthday_helper.delete_birthday(interaction.guild_id, user.id, name.lower())
         if not success:
-            return await interaction.send(f'An error occurred when deleting birthday {name.title()} associated with user {user.display_name}.')
-        await interaction.send(f'Successfully deleted birthday for {user.display_name}!')
+            return await interaction.send(f'An error occurred when deleting birthday {name.title()} associated with user {user.display_name}.', ephemeral=True)
+        await interaction.send(f'Successfully deleted birthday for {user.display_name}!', ephemeral=True)
 
     ##############################
     # Regular Slash Commands
@@ -136,11 +136,11 @@ class BirthdayCommands(commands.Cog):
             dt = datetime.strptime(date, '%m/%d/%Y')
             success = birthday_helper.add_birthday(interaction.guild_id, interaction.user.id, name.lower(), dt.month, dt.day, dt.year)
             if success:
-                await interaction.send('Birthday added.')
+                await interaction.send(f'Birthday added: `{name} | {dt.strftime("%b %d, %Y")}`', ephemeral=True)
             else:
-                await interaction.send(f'Birthday already exists for {name.title()}. Try a different name, or remove the existing birthday first.')
+                await interaction.send(f'Birthday already exists for {name.title()}. Try a different name, or remove the existing birthday first.', ephemeral=True)
         except ValueError:
-            return await interaction.send('Please provide a date in the format MM/DD/YYYY')
+            return await interaction.send('Please provide a date in the format MM/DD/YYYY', ephemeral=True)
         
     @birthday.subcommand(name='list', description='List birthdays')
     async def birthday_list(self, interaction: Interaction,
@@ -164,5 +164,18 @@ class BirthdayCommands(commands.Cog):
                                 name: str = SlashOption(name='name', description='Name of birthday to remove')):
         success = birthday_helper.delete_birthday(interaction.guild_id, interaction.user.id, name.lower())
         if not success:
-            return await interaction.send(f'An error occurred when deleting birthday {name.title()}.')
-        await interaction.send('Successfully deleted birthday!')
+            return await interaction.send(f'An error occurred when deleting birthday {name.title()}.', ephemeral=True)
+        await interaction.send('Successfully deleted birthday!', ephemeral=True)
+
+    @birthday.subcommand(name='upcoming', description='Show birthdays in the next month')
+    async def birthday_upcoming(self, interaction: Interaction):
+        birthdays = birthday_helper.get_upcoming_birthdays(interaction.guild_id)
+        if not birthdays:
+            return await interaction.send('There are no birthdays in the next month')
+        embed = messages.info(f'Upcoming birthdays in the next month:')
+        guild = self.bot.get_guild(interaction.guild_id)
+        for birthday in birthdays:
+            member = guild.get_member(birthday.user_id)
+            embed.add_field(name=f'{member.display_name}: {birthday.name.title()}', value=f'{birthday.month}/{birthday.day}/{birthday.year}')
+        await interaction.send(embed=embed)
+

@@ -29,7 +29,7 @@ else:
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=nextcord.Game(name="Dog's Life"))
+    await bot.change_presence(activity=nextcord.Game(name="Belles, Bourbon, and Bullets"))
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)

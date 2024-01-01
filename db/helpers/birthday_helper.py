@@ -139,3 +139,19 @@ def get_todays_baby_month_milestones() -> List[Birthday]:
     for birthday in queried_birthdays:
         birthdays[birthday.guild_id].append(birthday)
     return birthdays
+
+def get_upcoming_birthdays(guild_id: int):
+    # Get birthdays for this guild in the next month
+    now = dt.datetime.utcnow().replace(tzinfo=dt.timezone.utc)
+    next_month = now.month + 1
+    if next_month > 12:
+        next_month -= 12
+    queried_birthdays = DB.s.execute(
+        sa.text(f"""
+        SELECT *
+        FROM birthdays
+        WHERE guild_id = {guild_id} and ((day > {now.day} and month = {now.month}) or (day <= {now.day} and month = {next_month}));
+        """)
+    ).all()
+    return queried_birthdays
+
