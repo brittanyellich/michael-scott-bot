@@ -150,8 +150,10 @@ def get_upcoming_birthdays(guild_id: int):
         sa.text(f"""
         SELECT *
         FROM birthdays
-        WHERE guild_id = {guild_id} and ((day > {now.day} and month = {now.month}) or (day <= {now.day} and month = {next_month}));
+        WHERE guild_id = {guild_id} and ((day > {now.day} and month = {now.month}) or (day <= {now.day} and month = {next_month}))
+        ORDER BY month, day;
         """)
     ).all()
+
     return queried_birthdays
 

@@ -176,6 +176,6 @@ class BirthdayCommands(commands.Cog):
         guild = self.bot.get_guild(interaction.guild_id)
         for birthday in birthdays:
             member = guild.get_member(birthday.user_id)
-            embed.add_field(name=f'{member.display_name}: {birthday.name.title()}', value=f'{birthday.month}/{birthday.day}/{birthday.year}')
+            embed.add_field(name=f'{member.nick}: {birthday.name.title()}', value=f'{birthday.month}/{birthday.day}/{birthday.year}', inline=False)
         await interaction.send(embed=embed)
 
