@@ -4,6 +4,8 @@
 
 The purpose of this bot is to be a space for automating some tasks in a few family discord servers, and to experiment with some different bot functionality.
 
+Add the bot to your server with this link: https://discord.com/api/oauth2/authorize?client_id=1190886892657459290&permissions=274877974528&scope=bot
+
 For the bot's command reference, go to the [Docs](./docs/).
 
 ## Setup
