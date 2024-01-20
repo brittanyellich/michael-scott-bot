@@ -173,10 +173,14 @@ class BirthdayCommands(commands.Cog):
         birthdays = birthday_helper.get_upcoming_birthdays(interaction.guild_id)
         if not birthdays:
             return await interaction.send('There are no birthdays in the next month')
-        embed = messages.info(f'Upcoming birthdays in the next month:')
+        # Max of 25 embeds per message
+        max_birthdays_per_chunk = 25
+        birthday_chunks = [birthdays[i * max_birthdays_per_chunk:(i + 1) * max_birthdays_per_chunk] for i in range((len(birthdays) + max_birthdays_per_chunk - 1) // max_birthdays_per_chunk )]  
         guild = self.bot.get_guild(interaction.guild_id)
-        for birthday in birthdays:
-            member = guild.get_member(birthday.user_id)
-            embed.add_field(name=f'{calendar.month_name[birthday.month]} {birthday.day}', value=f'{member.mention}: {birthday.name.title()}', inline=False)
-        await interaction.send(embed=embed)
+        for chunk in birthday_chunks:
+            embed = messages.info(f'Upcoming birthdays in the next month:')
+            for birthday in chunk:
+                member = guild.get_member(birthday.user_id)
+                embed.add_field(name=f'{calendar.month_name[birthday.month]} {birthday.day}', value=f'{member.mention}: {birthday.name.title()}', inline=False)
+            await interaction.send(embed=embed)
 

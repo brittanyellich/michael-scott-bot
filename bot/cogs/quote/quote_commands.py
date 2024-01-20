@@ -5,6 +5,7 @@ from nextcord import slash_command, Interaction, SlashOption, Permissions, Membe
 from nextcord.ext import commands, tasks
 
 from bot.utils import messages
+from bot.config import Config
 from db.helpers import quote_helper
 
 class QuoteCommands(commands.Cog):
@@ -16,7 +17,7 @@ class QuoteCommands(commands.Cog):
     ##############################
 
     @slash_command(name='quote-admin',
-                   description='Quote admin commands', default_member_permissions=Permissions(manage_guild=True))
+                   description='Quote admin commands', default_member_permissions=Permissions(manage_guild=True), guild_ids=[Config.TESTING_GUILD])
     async def quote_admin(self, interaction: Interaction):
         pass
 
@@ -31,7 +32,7 @@ class QuoteCommands(commands.Cog):
     ##############################
 
     @slash_command(name='quote',
-                   description='Quote commands')
+                   description='Quote commands', guild_ids=[Config.TESTING_GUILD])
     async def quote(self, interaction: Interaction):
         pass
 
