@@ -16,6 +16,7 @@ class BirthdayCommands(commands.Cog):
         self.post_birthdays.start()
     
     # Every day at 5AM Pacific Time post birthday messages
+    # @tasks.loop(seconds=5.0)
     @tasks.loop(time=time(hour=12, minute=0, second=0, tzinfo=timezone.utc))
     async def post_birthdays(self):
         if not self.bot.is_ready():
@@ -23,44 +24,52 @@ class BirthdayCommands(commands.Cog):
 
         birthdays_by_guild_id = birthday_helper.get_todays_birthdays()
         for guild_id, birthdays in birthdays_by_guild_id.items():
-            guild = self.bot.get_guild(guild_id)
-            if guild is None:
-                # Can't find guild, skip posting these birthdays
-                continue
-            birthday_channel_id = birthday_helper.get_birthday_channel_id(guild_id)
-            if birthday_channel_id is None:
-                # No birthday channel set, skip posting these birthdays
-                continue
-            channel = self.bot.get_channel(birthday_channel_id)
-            if channel is None:
-                # Can't find channel, skip posting these birthdays
-                continue
-            # Assemble birthday message
-            message = messages.birthday_message()
-            for birthday in birthdays:
-                member = guild.get_member(birthday.user_id)
-                message = messages.birthday_entry(message, birthday, member)
-            message = messages.get_special_birthday_fields(message)
-            await channel.send(embed=message)
+            try:
+                guild = self.bot.get_guild(guild_id)
+                if guild is None:
+                    # Can't find guild, skip posting these birthdays
+                    continue
+                birthday_channel_id = birthday_helper.get_birthday_channel_id(guild_id)
+                if birthday_channel_id is None:
+                    # No birthday channel set, skip posting these birthdays
+                    continue
+                channel = self.bot.get_channel(birthday_channel_id)
+                if channel is None:
+                    # Can't find channel, skip posting these birthdays
+                    continue
+                # Assemble birthday message
+                message = messages.birthday_message()
+                for birthday in birthdays:
+                    member = guild.get_member(birthday.user_id)
+                    message = messages.birthday_entry(message, birthday, member)
+                message = messages.get_special_birthday_fields(message)
+                await channel.send(embed=message)
+            except Exception as e:
+                sentry_sdk.capture_message(f'Unable to send birthday messages for {guild.name}')
+                sentry_sdk.capture_exception(e)
         baby_month_milestones = birthday_helper.get_todays_baby_month_milestones()
         for guild_id, birthdays in baby_month_milestones.items():
-            guild = self.bot.get_guild(guild_id)
-            if guild is None:
-                # Can't find guild, skip posting these birthdays
-                continue
-            baby_month_milestone_channel_id = birthday_helper.get_baby_month_milestone_channel_id(guild_id)
-            if baby_month_milestone_channel_id is None:
-                # No baby month milestone channel set, skip posting these birthdays
-                continue
-            channel = self.bot.get_channel(baby_month_milestone_channel_id)
-            if channel is None:
-                # Can't find channel, skip posting these birthdays
-                continue
-            # Assemble baby month milestone message
-            for birthday in birthdays:
-                member = guild.get_member(birthday.user_id)
-                message = messages.baby_month_milestone_message(birthday, member)
-                await channel.send(embed=message)
+            try:
+                guild = self.bot.get_guild(guild_id)
+                if guild is None:
+                    # Can't find guild, skip posting these birthdays
+                    continue
+                baby_month_milestone_channel_id = birthday_helper.get_baby_month_milestone_channel_id(guild_id)
+                if baby_month_milestone_channel_id is None:
+                    # No baby month milestone channel set, skip posting these birthdays
+                    continue
+                channel = self.bot.get_channel(baby_month_milestone_channel_id)
+                if channel is None:
+                    # Can't find channel, skip posting these birthdays
+                    continue
+                # Assemble baby month milestone message
+                for birthday in birthdays:
+                    member = guild.get_member(birthday.user_id)
+                    message = messages.baby_month_milestone_message(birthday, member)
+                    await channel.send(embed=message)
+            except Exception as e:
+                sentry_sdk.capture_message(f'Unable to send baby month milestone messages for {guild.name}')
+                sentry_sdk.capture_exception(e)
 
     @post_birthdays.error
     async def post_birthdays_error(self, e):
