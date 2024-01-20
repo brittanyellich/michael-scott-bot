@@ -5,6 +5,7 @@ from db import DB
 import sqlalchemy as sa
 import datetime as dt
 import calendar
+import sentry_sdk
 
 from db.model.birthday import Birthday
 from db.model.guild_config import GuildConfig
@@ -16,6 +17,9 @@ def add_birthday(guild_id: int, user_id: int, name: str, month: int, day: int, y
         return True
     except sa.exc.IntegrityError:
         DB.s.rollback()
+        return False
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
         return False
 
 def list_birthdays(guild_id: int, user_id: int):
@@ -35,7 +39,8 @@ def delete_birthday(guild_id: int, user_id: int, name: str):
         )
         DB.s.commit()
         return True
-    except:
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
         DB.s.rollback()
         return False
 
@@ -52,7 +57,8 @@ def update_birthday_channel_settings(guild_id: int, channel_id: int):
             )
         DB.s.commit()
         return True
-    except:
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
         DB.s.rollback()
         return False
 
@@ -69,7 +75,8 @@ def update_baby_month_channel_settings(guild_id: int, channel_id: int):
             )
         DB.s.commit()
         return True
-    except:
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
         DB.s.rollback()
         return False
 

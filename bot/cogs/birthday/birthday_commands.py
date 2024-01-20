@@ -1,6 +1,7 @@
 from datetime import datetime, timezone, time
 import asyncio
 import calendar
+import sentry_sdk
 
 from nextcord import slash_command, Interaction, SlashOption, Permissions, Member, TextChannel
 from nextcord.ext import commands, tasks
@@ -64,7 +65,7 @@ class BirthdayCommands(commands.Cog):
     @post_birthdays.error
     async def post_birthdays_error(self, e):
         print(e)
-        # sentry_sdk.capture_exception(e)
+        sentry_sdk.capture_exception(e)
         await asyncio.sleep(60)
         self.post_birthdays.restart()
 
