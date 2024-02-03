@@ -15,3 +15,4 @@ These commands are only availabl
 - `/birthday add`: Add a birthday with a name and a date. Date must be added in the `MM/DD/YYYY` format. Names must be unique per user.
 - `/birthday remove`: Remove a birthday assigned to your user by `name`.
 - `/birthday list`: Given a `user`, list all birthdays assigned to that user.
+- `/birthday upcoming`: Gives a list of birthdays in the next month
