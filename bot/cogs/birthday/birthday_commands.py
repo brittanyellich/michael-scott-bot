@@ -41,6 +41,9 @@ class BirthdayCommands(commands.Cog):
                 message = messages.birthday_message()
                 for birthday in birthdays:
                     member = guild.get_member(birthday.user_id)
+                    if member is None:
+                        # Member may have left this server
+                        continue
                     message = messages.birthday_entry(message, birthday, member)
                 message = messages.get_special_birthday_fields(message)
                 await channel.send(embed=message)
@@ -65,6 +68,9 @@ class BirthdayCommands(commands.Cog):
                 # Assemble baby month milestone message
                 for birthday in birthdays:
                     member = guild.get_member(birthday.user_id)
+                    if member is None:
+                        # Member may have left this server
+                        continue
                     message = messages.baby_month_milestone_message(birthday, member)
                     await channel.send(embed=message)
             except Exception as e:
