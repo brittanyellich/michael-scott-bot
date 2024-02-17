@@ -4,7 +4,7 @@ This bot allows remembering birthdays as well as posting messsages as reminders 
 
 ## Admin Commands
 
-These commands are only availabl
+These commands are only available
 
 - `/birthday-admin settings`: Set the `birthday_channel` and the `baby_month_milestone_channel`. Without these two channels set, birthday and baby month milestone messages will not post.
 - `/birthday-admin add`: Add a birthday with a name, date, and user. Date must be added in the `MM/DD/YYYY` format. Names must be unique per user.

@@ -64,7 +64,7 @@ def get_birthday_number(year: int):
     return str(birthday_number) + suffix
 
 def birthday_entry(embed: nextcord.Embed, birthday: Birthday, member: nextcord.Member):
-    embed.add_field(name='\u200b', value=f'{member.mention} a very happy {get_birthday_number(birthday.year)} birthday to {birthday.name.title()}!', inline=False)
+    embed.add_field(name='\u200b', value=f'{member.mention} ({member.display_name}) a very happy {get_birthday_number(birthday.year)} birthday to {birthday.name.title()}!', inline=False)
     return embed
 
 def get_special_birthday_fields(embed: nextcord.Embed):
@@ -85,5 +85,5 @@ def get_months_old(month: int, year: int):
 def baby_month_milestone_message(birthday: Birthday, member: nextcord.Member):
     embed = nextcord.Embed(color=SUCCESS_COLOR, title='Someone is celebrating a milestone!')
     months = str(get_months_old(birthday.month, birthday.year)) + " month" + {True: "s", False: ""}[get_months_old(birthday.month, birthday.year) > 1]
-    embed.add_field(name='\u200b', value=f'{member.mention} happy {months} to {birthday.name.title()}!', inline=False)
+    embed.add_field(name='\u200b', value=f'{member.mention} ({member.display_name}) happy {months} to {birthday.name.title()}!', inline=False)
     return embed
